@@ -14,11 +14,9 @@ test.describe('Google Search', function() {
     driver.quit();
   });
 
-  test.it('should append query to title', function() {
-    driver.get('http://www.google.com/ncr');
-    driver.findElement(By.name('q')).sendKeys('webdriver');
-    driver.findElement(By.name('btnG')).click();
-    driver.wait(until.titleIs('webdriver - Google Search'), 1000);
+  test.it('should open visual editor', function() {
+    driver.get('http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?veaction=edit');
+    driver.wait(until.elementLocated(By.css('html.ve-active.ve-activated')), 10000);
     driver.takeScreenshot().then((image) => {
       require('fs').writeFile('screenshot.png', image, 'base64');
     });
