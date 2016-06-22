@@ -19,5 +19,8 @@ test.describe('Google Search', function() {
     driver.findElement(By.name('q')).sendKeys('webdriver');
     driver.findElement(By.name('btnG')).click();
     driver.wait(until.titleIs('webdriver - Google Search'), 1000);
+    driver.takeScreenshot().then((image) => {
+      require('fs').writeFile('screenshot.png', image, 'base64');
+    });
   });
 });
