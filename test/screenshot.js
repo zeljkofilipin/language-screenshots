@@ -19,7 +19,10 @@ test.describe('Screenshot', function() {
     driver.manage().timeouts().setScriptTimeout(10000);
     driver.wait(
       driver.executeAsyncScript(
-        "mw.hook( 've.activationComplete' ).add( arguments[arguments.length-1]);"
+        // This function is converted to a string and executed in the browser
+        function () {
+          mw.hook( 've.activationComplete' ).add( arguments[arguments.length-1]);
+        }
       ).then(function() {
         driver.takeScreenshot().then((image) => {
           require('fs').writeFile('screenshot.png', image, 'base64');
