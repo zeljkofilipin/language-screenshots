@@ -72,9 +72,14 @@ test.describe('Screenshot', function() {
         }
       ).then(function( rect ) {
         driver.takeScreenshot().then((image) => {
-          fs.writeFile('ve-with-cite-dialogue.png', image, 'base64');
+          fs.writeFileSync('ve-with-cite-dialogue-original.png', image, 'base64');
+          var Jimp = require("jimp");
+          Jimp.read( 've-with-cite-dialogue-original.png', function( err, jimpImage ) {
+            if ( err ) { console.log( err ) }
+            console.log(jimpImage);
+            jimpImage.crop( rect.left, rect.top, rect.width, rect.height ).write( "ve-with-cite-dialogue.png" )
+          } )
         })
-        // TODO: crop the screenshot using rect
       }), 10000
     );
   });

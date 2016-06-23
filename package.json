@@ -19,6 +19,7 @@
   "dependencies": {
     "grunt": "^1.0.1",
     "grunt-mocha-test": "^0.12.7",
+    "jimp": "^0.2.24",
     "mocha": "^2.5.3",
     "selenium-webdriver": "^2.53.2"
   }
