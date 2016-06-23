@@ -63,13 +63,17 @@ test.describe('Screenshot', function() {
           mw.hook( 've.activationComplete' ).add( function() {
             ve.init.target.surface.view.focus();
             ve.init.target.toolbar.tools.citefromid.onSelect();
-            setTimeout(done, 500);
+            setTimeout(function() {
+              var rect = ve.init.target.surface.context.inspectors.currentWindow.$element[0].getBoundingClientRect();
+              done( rect );
+            }, 500);
           });
         }
-      ).then(function() {
+      ).then(function( rect ) {
         driver.takeScreenshot().then((image) => {
           require('fs').writeFile('ve-with-cite-dialogue.png', image, 'base64');
         })
+        // TODO: crop the screenshot using rect
       }), 10000
     );
   });
