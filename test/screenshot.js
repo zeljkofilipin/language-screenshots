@@ -52,4 +52,25 @@ test.describe('Screenshot', function() {
       }), 10000
     );
   });
+  test.it('should open cite dialogue', function() {
+    driver.get('http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?vehidebetadialog=true&veaction=edit');
+    driver.manage().timeouts().setScriptTimeout(10000);
+    driver.wait(
+      driver.executeAsyncScript(
+        // This function is converted to a string and executed in the browser
+        function () {
+          var done = arguments[arguments.length-1]
+          mw.hook( 've.activationComplete' ).add( function() {
+            ve.init.target.surface.view.focus();
+            ve.init.target.toolbar.tools.citefromid.onSelect();
+            setTimeout(done, 500);
+          });
+        }
+      ).then(function() {
+        driver.takeScreenshot().then((image) => {
+          require('fs').writeFile('ve-with-cite-dialogue.png', image, 'base64');
+        })
+      }), 10000
+    );
+  });
 });
