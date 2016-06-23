@@ -100,7 +100,40 @@ test.describe( 'Screenshot', function () {
 				}
 			).then( function ( rect ) {
 				return driver.takeScreenshot().then( function ( image ) {
-					return cropScreenshot( 've-with-cite-dialogue.png', image, rect );
+					return cropScreenshot( 've-cite-dialogue.png', image, rect );
+				} );
+			} ), 10000
+		);
+	} );
+	test.it( 'should open format menu', function () {
+		driver.get( 'http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?vehidebetadialog=true&veaction=edit' );
+		driver.manage().timeouts().setScriptTimeout( 10000 );
+		driver.wait(
+			driver.executeAsyncScript(
+				// This function is converted to a string and executed in the browser
+				function () {
+					var done = arguments[ arguments.length - 1 ];
+					mw.hook( 've.activationComplete' ).add( function () {
+						ve.init.target.actionsToolbar.tools.notices.getPopup().toggle( false );
+						ve.init.target.surface.view.focus();
+						setTimeout( function () {
+							ve.init.target.toolbar.tools.paragraph.toolGroup.setActive( true );
+							setTimeout( function () {
+								var handle = ve.init.target.toolbar.tools.paragraph.toolGroup.$element[ 0 ].getBoundingClientRect(),
+									group = ve.init.target.toolbar.tools.paragraph.toolGroup.$group[ 0 ].getBoundingClientRect();
+								done( {
+									top: handle.top,
+									left: Math.min( handle.left, group.left ),
+									width: Math.max( handle.right, group.right ) - Math.min( handle.left, group.left ),
+									height: group.bottom - handle.top
+								} );
+							}, 500 );
+						} );
+					} );
+				}
+			).then( function ( rect ) {
+				return driver.takeScreenshot().then( function ( image ) {
+					return cropScreenshot( 've-format-menu.png', image, rect );
 				} );
 			} ), 10000
 		);
