@@ -15,7 +15,7 @@ test.describe('Screenshot', function() {
   });
 
   test.it('should open visual editor', function() {
-    driver.get('http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?veaction=edit');
+    driver.get('http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?vehidebetadialog=true&veaction=edit');
     driver.manage().timeouts().setScriptTimeout(10000);
     driver.wait(
       driver.executeAsyncScript(
