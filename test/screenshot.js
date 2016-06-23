@@ -6,11 +6,11 @@ var By = require('selenium-webdriver').By,
 test.describe('Screenshot', function() {
   var driver;
 
-  test.before(function() {
+  test.beforeEach(function() {
     driver = new chrome.Driver();
   });
 
-  test.after(function() {
+  test.afterEach(function() {
     driver.quit();
   });
 
