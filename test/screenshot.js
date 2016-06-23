@@ -1,9 +1,9 @@
- var By = require('selenium-webdriver').By,
-     until = require('selenium-webdriver').until,
-     chrome = require('selenium-webdriver/chrome'),
-     test = require('selenium-webdriver/testing');
+var By = require('selenium-webdriver').By,
+    until = require('selenium-webdriver').until,
+    chrome = require('selenium-webdriver/chrome'),
+    test = require('selenium-webdriver/testing');
 
-test.describe('Google Search', function() {
+test.describe('Screenshot', function() {
   var driver;
 
   test.before(function() {
@@ -16,9 +16,15 @@ test.describe('Google Search', function() {
 
   test.it('should open visual editor', function() {
     driver.get('http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?veaction=edit');
-    driver.wait(until.elementLocated(By.css('html.ve-active.ve-activated')), 10000);
-    driver.takeScreenshot().then((image) => {
-      require('fs').writeFile('screenshot.png', image, 'base64');
-    });
+    driver.manage().timeouts().setScriptTimeout(10000);
+    driver.wait(
+      driver.executeAsyncScript(
+        "mw.hook( 've.activationComplete' ).add( arguments[arguments.length-1]);"
+      ).then(function() {
+        driver.takeScreenshot().then((image) => {
+          require('fs').writeFile('screenshot.png', image, 'base64');
+        })
+      }), 10000
+    );
   });
 });
