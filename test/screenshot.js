@@ -48,6 +48,7 @@ test.describe( 'Screenshot', function () {
 				function () {
 					var done = arguments[ arguments.length - 1 ];
 					mw.hook( 've.activationComplete' ).add( function () {
+						ve.init.target.actionsToolbar.tools.notices.getPopup().toggle( false );
 						ve.init.target.welcomeDialog.close().then( done );
 					} );
 				}
@@ -67,7 +68,8 @@ test.describe( 'Screenshot', function () {
 				function () {
 					var done = arguments[ arguments.length - 1 ];
 					mw.hook( 've.activationComplete' ).add( function () {
-						ve.init.target.surface.dialogs.opening.then( done );
+						ve.init.target.actionsToolbar.tools.notices.getPopup().toggle( false );
+						setTimeout( done, 500 );
 					} );
 				}
 			).then( function () {
