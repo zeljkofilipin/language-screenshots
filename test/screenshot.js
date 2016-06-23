@@ -86,12 +86,12 @@ test.describe( 'Screenshot', function () {
 				function () {
 					var done = arguments[ arguments.length - 1 ];
 					mw.hook( 've.activationComplete' ).add( function () {
+						ve.init.target.actionsToolbar.tools.notices.getPopup().toggle( false );
 						ve.init.target.surface.view.focus();
 						setTimeout( function () {
 							ve.init.target.toolbar.tools.citefromid.onSelect();
 							setTimeout( function () {
-								var rect = ve.init.target.surface.context.inspectors.currentWindow.$element[ 0 ].getBoundingClientRect();
-								done( rect );
+								done( ve.init.target.surface.context.inspectors.currentWindow.$element[ 0 ].getBoundingClientRect() );
 							}, 500 );
 						} );
 					} );
