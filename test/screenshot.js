@@ -64,21 +64,19 @@ test.describe( 'Screenshot', function () {
 					var done = arguments[ arguments.length - 1 ];
 					mw.hook( 've.activationComplete' ).add( function () {
 						ve.init.target.surface.view.focus();
-						ve.init.target.toolbar.tools.citefromid.onSelect();
 						setTimeout( function () {
-							var rect = ve.init.target.surface.context.inspectors.currentWindow.$element[ 0 ].getBoundingClientRect();
-							done( rect );
-						}, 500 );
+							ve.init.target.toolbar.tools.citefromid.onSelect();
+							setTimeout( function () {
+								var rect = ve.init.target.surface.context.inspectors.currentWindow.$element[ 0 ].getBoundingClientRect();
+								done( rect );
+							}, 500 );
+						} );
 					} );
 				}
 			).then( function ( rect ) {
-				driver.takeScreenshot().then( function ( image ) {
+				return driver.takeScreenshot().then( function ( image ) {
 					fs.writeFileSync( 've-with-cite-dialogue-original.png', image, 'base64' );
-					Jimp.read( 've-with-cite-dialogue-original.png', function ( err, jimpImage ) {
-						if ( err ) {
-							console.log( err );
-						}
-						console.log( jimpImage );
+					return Jimp.read( 've-with-cite-dialogue-original.png' ).then( function ( jimpImage ) {
 						jimpImage
 							.crop( rect.left, rect.top, rect.width, rect.height )
 							.write( 've-with-cite-dialogue.png' );
