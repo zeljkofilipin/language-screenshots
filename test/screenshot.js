@@ -1,7 +1,8 @@
 var By = require('selenium-webdriver').By,
     until = require('selenium-webdriver').until,
     chrome = require('selenium-webdriver/chrome'),
-    test = require('selenium-webdriver/testing');
+    test = require('selenium-webdriver/testing'),
+    fs = require('fs');
 
 test.describe('Screenshot', function() {
   var driver;
@@ -28,7 +29,7 @@ test.describe('Screenshot', function() {
         }
       ).then(function() {
         driver.takeScreenshot().then((image) => {
-          require('fs').writeFile('ve-without-welcome-dialogue.png', image, 'base64');
+          fs.writeFile('ve-without-welcome-dialogue.png', image, 'base64');
         })
       }), 10000
     );
@@ -47,7 +48,7 @@ test.describe('Screenshot', function() {
         }
       ).then(function() {
         driver.takeScreenshot().then((image) => {
-          require('fs').writeFile('ve-with-welcome-dialogue.png', image, 'base64');
+          fs.writeFile('ve-with-welcome-dialogue.png', image, 'base64');
         })
       }), 10000
     );
@@ -71,7 +72,7 @@ test.describe('Screenshot', function() {
         }
       ).then(function( rect ) {
         driver.takeScreenshot().then((image) => {
-          require('fs').writeFile('ve-with-cite-dialogue.png', image, 'base64');
+          fs.writeFile('ve-with-cite-dialogue.png', image, 'base64');
         })
         // TODO: crop the screenshot using rect
       }), 10000
