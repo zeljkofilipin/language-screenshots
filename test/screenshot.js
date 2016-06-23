@@ -14,18 +14,40 @@ test.describe('Screenshot', function() {
     driver.quit();
   });
 
-  test.it('should open visual editor', function() {
-    driver.get('http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?vehidebetadialog=true&veaction=edit');
+  test.it('should open visual editor without welcome dialogue', function() {
+    driver.get('http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?veaction=edit');
     driver.manage().timeouts().setScriptTimeout(10000);
     driver.wait(
       driver.executeAsyncScript(
         // This function is converted to a string and executed in the browser
         function () {
-          mw.hook( 've.activationComplete' ).add( arguments[arguments.length-1]);
+          var done = arguments[arguments.length-1]
+          mw.hook( 've.activationComplete' ).add( function() {
+            ve.init.target.welcomeDialog.close().then( done )
+          });
         }
       ).then(function() {
         driver.takeScreenshot().then((image) => {
-          require('fs').writeFile('screenshot.png', image, 'base64');
+          require('fs').writeFile('ve-without-welcome-dialogue.png', image, 'base64');
+        })
+      }), 10000
+    );
+  });
+  test.it('should open visual editor with welcome dialogue', function() {
+    driver.get('http://en.wikipedia.beta.wmflabs.org/wiki/Special:Random?veaction=edit');
+    driver.manage().timeouts().setScriptTimeout(10000);
+    driver.wait(
+      driver.executeAsyncScript(
+        // This function is converted to a string and executed in the browser
+        function () {
+          var done = arguments[arguments.length-1]
+          mw.hook( 've.activationComplete' ).add( function() {
+            ve.init.target.surface.dialogs.opening.then( done );
+          });
+        }
+      ).then(function() {
+        driver.takeScreenshot().then((image) => {
+          require('fs').writeFile('ve-with-welcome-dialogue.png', image, 'base64');
         })
       }), 10000
     );
