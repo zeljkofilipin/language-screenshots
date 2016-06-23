@@ -5,6 +5,29 @@ var By = require( 'selenium-webdriver' ).By,
 	fs = require( 'fs' ),
 	Jimp = require( 'jimp' );
 
+function cropScreenshot( filename, image, rect, padding ) {
+	var temp = 'temp-' + Math.random() + '.tmp.png';
+
+	if ( padding === undefined ) {
+		padding = 10;
+	}
+
+	fs.writeFileSync( temp, image, 'base64' );
+
+	return Jimp.read( temp ).then( function ( jimpImage ) {
+		fs.unlinkSync( temp );
+		jimpImage
+			.crop(
+				rect.left - padding,
+				rect.top - padding,
+				rect.width + ( padding * 2 ),
+				rect.height + ( padding * 2 )
+			)
+			.write( filename );
+	} );
+
+}
+
 test.describe( 'Screenshot', function () {
 	var driver;
 
@@ -75,12 +98,7 @@ test.describe( 'Screenshot', function () {
 				}
 			).then( function ( rect ) {
 				return driver.takeScreenshot().then( function ( image ) {
-					fs.writeFileSync( 've-with-cite-dialogue-original.png', image, 'base64' );
-					return Jimp.read( 've-with-cite-dialogue-original.png' ).then( function ( jimpImage ) {
-						jimpImage
-							.crop( rect.left, rect.top, rect.width, rect.height )
-							.write( 've-with-cite-dialogue.png' );
-					} );
+					return cropScreenshot( 've-with-cite-dialogue.png', image, rect );
 				} );
 			} ), 10000
 		);
