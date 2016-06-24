@@ -65,11 +65,13 @@ test.describe( 'Screenshot', function () {
 				}
 			).then( function () {
 				return driver.executeAsyncScript( clientScript ).then( function ( rect ) {
-					return driver.takeScreenshot().then( function ( image ) {
+					return driver.takeScreenshot().then( function ( base64Image ) {
+						var imageBuffer;
 						if ( rect ) {
-							return cropScreenshot( filename, image, rect, padding );
+							imageBuffer = new Buffer( base64Image, 'base64' );
+							return cropScreenshot( filename, imageBuffer, rect, padding );
 						} else {
-							fs.writeFile( filename, image, 'base64' );
+							fs.writeFile( filename, base64Image, 'base64' );
 						}
 					} );
 				} );
@@ -78,17 +80,14 @@ test.describe( 'Screenshot', function () {
 		);
 	}
 
-	function cropScreenshot( filename, image, rect, padding ) {
+	function cropScreenshot( filename, imageBuffer, rect, padding ) {
 		var temp = 'temp-' + Math.random() + '.tmp.png';
 
 		if ( padding === undefined ) {
 			padding = 5;
 		}
 
-		fs.writeFileSync( temp, image, 'base64' );
-
-		return Jimp.read( temp ).then( function ( jimpImage ) {
-			fs.unlinkSync( temp );
+		return Jimp.read( imageBuffer ).then( function ( jimpImage ) {
 			jimpImage
 				.crop(
 					rect.left - padding,
