@@ -54,8 +54,13 @@ test.describe( 'Screenshot', function () {
 							surfaceView = target.getSurface().getView();
 						// Hide edit notices
 						target.actionsToolbar.tools.notices.getPopup().toggle( false );
+						// Modify the document to make the save button blue
 						// Wait for focus
-						surfaceView.once( 'focus', done );
+						surfaceView.once( 'focus', function () {
+							target.surface.getModel().getFragment().insertContent( ' ' ).collapseToStart().select();
+							// Wait for save button fade
+							setTimeout( done, 100 );
+						} );
 					} );
 				}
 			).then( function () {
@@ -114,8 +119,8 @@ test.describe( 'Screenshot', function () {
 					seleniumUtils.getBoundingRect( [
 						ve.init.target.toolbar.$element[ 0 ],
 						$( '#ca-nstab-main' )[ 0 ]
-					]
-				) );
+					] )
+				);
 			},
 			0
 		);
@@ -150,8 +155,8 @@ test.describe( 'Screenshot', function () {
 						seleniumUtils.getBoundingRect( [
 							toolGroup.$element[ 0 ],
 							toolGroup.$group[ 0 ]
-						]
-					) );
+						] )
+					);
 				}, 500 );
 			}
 		);
@@ -169,8 +174,8 @@ test.describe( 'Screenshot', function () {
 						seleniumUtils.getBoundingRect( [
 							toolGroup.$element[ 0 ],
 							toolGroup.$group[ 0 ]
-						]
-					) );
+						] )
+					);
 				}, 500 );
 			}
 		);
@@ -187,8 +192,8 @@ test.describe( 'Screenshot', function () {
 						seleniumUtils.getBoundingRect( [
 							toolGroup.$element[ 0 ],
 							toolGroup.$group[ 0 ]
-						]
-					) );
+						] )
+					);
 				}, 500 );
 			}
 		);
@@ -207,8 +212,38 @@ test.describe( 'Screenshot', function () {
 							toolGroup.$group[ 0 ],
 							// Include save button for context
 							ve.init.target.toolbarSaveButton.$element[ 0 ]
-						]
-					) );
+						] )
+					);
+				}, 500 );
+			}
+		);
+	} );
+	test.it( 'Toolbar actions', function () {
+		runScreenshotTest( 'VisualEditor_toolbar_actions',
+			// This function is converted to a string and executed in the browser
+			function () {
+				var done = arguments[ arguments.length - 1 ];
+				done(
+					seleniumUtils.getBoundingRect( [
+						ve.init.target.toolbar.$actions[ 0 ]
+					] )
+				);
+			},
+			0
+		);
+	} );
+	test.it( 'Save dialog', function () {
+		runScreenshotTest( 'VisualEditor_save_dialog',
+			// This function is converted to a string and executed in the browser
+			function () {
+				var done = arguments[ arguments.length - 1 ];
+				ve.init.target.toolbarSaveButton.emit( 'click' );
+				setTimeout( function () {
+					done(
+						seleniumUtils.getBoundingRect( [
+							ve.init.target.surface.dialogs.currentWindow.$frame[ 0 ]
+						] )
+					);
 				}, 500 );
 			}
 		);
