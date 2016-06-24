@@ -260,7 +260,7 @@ test.describe( 'Screenshot', function () {
 							ve.init.target.surface.toolbarDialogs.$element[ 0 ]
 						]
 					) );
-				}, 500 );
+				}, 1000 );
 			}
 		);
 	} );
