@@ -1,21 +1,9 @@
 {
-  "name": "language-screenshots",
-  "version": "0.0.1",
-  "description": "",
-  "main": "index.js",
+  "private": true,
   "scripts": {
     "test": "grunt"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/zeljkofilipin/language-screenshots.git"
-  },
-  "author": "",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/zeljkofilipin/language-screenshots/issues"
-  },
-  "homepage": "https://github.com/zeljkofilipin/language-screenshots#readme",
   "dependencies": {
     "grunt": "^1.0.1",
     "grunt-jscs": "2.8.0",
